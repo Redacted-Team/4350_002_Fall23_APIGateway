@@ -39,7 +39,7 @@ namespace Micro
                 Title = "Pong",
                 //Content = "~/js/pong.js",
                 Author = "Forest Gump",
-                Description = "Hit the ball",
+                Description = "RUN FOREST RUN!",
                 HowTo = "Hit the back back",
                 //Thumbnail = "/images/pong.jpg"
             },
