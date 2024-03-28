@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
-namespace Micro
+namespace Gateway
 {
     [ApiController]
     [Route("[controller]")]
-    public class MicroController : ControllerBase
+    public class GatewayController : ControllerBase
     {
         private static readonly List<GameInfo> TheInfo = new List<GameInfo>
         {
@@ -54,9 +54,9 @@ namespace Micro
 
         };
 
-        private readonly ILogger<MicroController> _logger;
+        private readonly ILogger<GatewayController> _logger;
 
-        public MicroController(ILogger<MicroController> logger)
+        public GatewayController(ILogger<GatewayController> logger)
         {
             _logger = logger;
         }

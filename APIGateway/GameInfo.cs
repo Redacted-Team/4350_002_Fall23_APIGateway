@@ -1,4 +1,4 @@
-﻿namespace Micro
+﻿namespace Gateway
 {
     public class GameInfo
     {
