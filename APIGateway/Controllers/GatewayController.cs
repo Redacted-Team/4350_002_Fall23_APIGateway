@@ -19,11 +19,11 @@ namespace Gateway
         {
             new GameInfo { 
                 //Id = 1,
-                Title = "Failed to retrive title from microservice",
+                Title = "Failed to retrieve from Microservice",
                 //Content = "~/js/snake.js",
-                Author = "Fall 2023 Semester",
+                Author = "Failed to retrieve from Microservice",
                 DateAdded = "",
-                Description = "Snake is a classic arcade game that challenges the player to control a snake-like creature that grows longer as it eats apples. The player must avoid hitting the walls or the snake's own body, which can end the game.\r\n",
+                Description = "Failed to retrieve from Microservice",
                 HowTo = "Control with arrow keys.",
                 //Thumbnail = "/images/snake.jpg" //640x360 resolution
                 LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
@@ -31,24 +31,23 @@ namespace Gateway
     },
             new GameInfo { 
                 //Id = 2,
-                Title = "Tetris",
+                Title = "Failed to retrieve from Microservice",
                 //Content = "~/js/tetris.js",
-                Author = "Fall 2023 Semester",
+                Author = "Failed to retrieve from Microservice",
                 DateAdded = "",
-                Description = "Tetris is a classic arcade puzzle game where the player has to arrange falling blocks, also known as Tetronimos, of different shapes and colors to form complete rows on the bottom of the screen. The game gets faster and harder as the player progresses, and ends when the Tetronimos reach the top of the screen.",
-                HowTo = "Control with arrow keys: Up arrow to spin, down to speed up fall, space to insta-drop.",
+                Description = "Failed to retrieve from Microservice",
                 //Thumbnail = "/images/tetris.jpg"
                 LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
                 
             },
             new GameInfo { 
                 //Id = 3,
-                Title = "Pong",
+                Title = "Failed to retrieve from Microservice",
                 //Content = "~/js/pong.js",
-                Author = "Fall 2023 Semester",
+                Author = "Failed to retrieve from Microservice",
                 DateAdded = "",
-                Description = "Pong is a classic arcade game where the player uses a paddle to hit a ball against a computer's paddle. Either party scores when the ball makes it past the opponent's paddle.",
-                HowTo = "Control with arrow keys.",
+                Description = "Failed to retrieve from Microservice",
+                HowTo = "Failed to retrieve from Microservice",
                 //Thumbnail = "/images/pong.jpg"
                 LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
             },
