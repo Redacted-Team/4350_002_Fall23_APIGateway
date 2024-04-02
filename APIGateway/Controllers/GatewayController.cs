@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 
 namespace Gateway
 {
@@ -53,6 +54,25 @@ namespace Gateway
             },
 
         };
+
+        public async Task<GameInfo[]> GetGamesAsync()
+        {
+            try
+            {
+                var responseMessage = await this.client.GetAsync("/Micro");
+
+                if (responseMessage != null)
+                {
+                    var stream = await responseMessage.Content.ReadAsStreamAsync();
+                    return await JsonSerializer.DeserializeAsync<GameInfo[]>(stream, options);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return new GameInfo[] { };
+        }
 
         private readonly ILogger<GatewayController> _logger;
 
