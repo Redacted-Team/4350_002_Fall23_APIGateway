@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace Gateway
 {
@@ -54,6 +55,15 @@ namespace Gateway
 
         };
 
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
+        private readonly HttpClient client;
+        private readonly ILogger<GatewayController> _logger;
+
         public async Task<GameInfo[]> GetGamesAsync()
         {
             try
@@ -73,14 +83,28 @@ namespace Gateway
             return new GameInfo[] { };
         }
 
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions()
+        /*
+        public async Task GetGamesWithInfo()
         {
-            PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        };
+            GameInfo[] gameInfos = await GetGamesAsync();
 
-        private readonly HttpClient client;
-        private readonly ILogger<GatewayController> _logger;
+            TheInfo
+            foreach (Game game in games)
+            {
+                GameInfo info = gameInfos.FirstOrDefault(x => x.Title == game.Title);
+                if (info != null)
+                {
+                    game.Author = info.Author;
+                    game.HowTo = info.HowTo;
+                    game.DateAdded = info.DateAdded;
+                    game.Description = $"{info.Description} \n {info.DateAdded}";
+                    game.LeaderBoard = info.LeaderBoard;
+                }
+            }
+
+            return games;
+        }
+        */
 
         public GatewayController(ILogger<GatewayController> logger)
         {
