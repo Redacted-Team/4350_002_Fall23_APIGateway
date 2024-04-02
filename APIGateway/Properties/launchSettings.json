@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "GameMicroServer": {
+    "APIGateway": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
