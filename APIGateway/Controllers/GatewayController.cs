@@ -19,7 +19,7 @@ namespace Gateway
         {
             new GameInfo { 
                 //Id = 1,
-                Title = "Snake",
+                Title = "Failed to retrive title from microservice",
                 //Content = "~/js/snake.js",
                 Author = "Fall 2023 Semester",
                 DateAdded = "",
@@ -74,6 +74,13 @@ namespace Gateway
             return new GameInfo[] { };
         }
 
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
+        private readonly HttpClient client;
         private readonly ILogger<GatewayController> _logger;
 
         public GatewayController(ILogger<GatewayController> logger)
