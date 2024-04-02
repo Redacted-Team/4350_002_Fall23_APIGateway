@@ -24,7 +24,7 @@ namespace Gateway
                 Author = "Failed to retrieve from Microservice",
                 DateAdded = "",
                 Description = "Failed to retrieve from Microservice",
-                HowTo = "Control with arrow keys.",
+                HowTo = "Failed to retrieve from Microservice",
                 //Thumbnail = "/images/snake.jpg" //640x360 resolution
                 LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
 
@@ -36,6 +36,7 @@ namespace Gateway
                 Author = "Failed to retrieve from Microservice",
                 DateAdded = "",
                 Description = "Failed to retrieve from Microservice",
+                HowTo = "Failed to retrieve from Microservice",
                 //Thumbnail = "/images/tetris.jpg"
                 LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
                 
