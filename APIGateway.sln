@@ -5,6 +5,10 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\APIGateway.csproj", "{C8787DE3-73A1-4FA9-BC23-865FCF0560AF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BucStop", "..\4350_002_Fall23_BucStop\BucStop\BucStop.csproj", "{A46190AC-C6F5-4321-9615-6F53D7CACBE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMicroServer", "..\4350_002_Fall23_MicroService\GameMicroServer\GameMicroServer.csproj", "{76404636-8BD0-492F-93BA-2FF8E51550A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{C8787DE3-73A1-4FA9-BC23-865FCF0560AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8787DE3-73A1-4FA9-BC23-865FCF0560AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8787DE3-73A1-4FA9-BC23-865FCF0560AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A46190AC-C6F5-4321-9615-6F53D7CACBE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A46190AC-C6F5-4321-9615-6F53D7CACBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A46190AC-C6F5-4321-9615-6F53D7CACBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A46190AC-C6F5-4321-9615-6F53D7CACBE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76404636-8BD0-492F-93BA-2FF8E51550A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76404636-8BD0-492F-93BA-2FF8E51550A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76404636-8BD0-492F-93BA-2FF8E51550A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76404636-8BD0-492F-93BA-2FF8E51550A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
