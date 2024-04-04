@@ -1,7 +1,7 @@
 # APIGateway
 ### A Team [Redacted] Project
 ### Members:
-> Kurt Brewer, Josh Rucevice, Sharlie Shahan, Ethan Webb, Ethan Hensley, Patrick Vergason, Bryson Brandon
+> Kurt Brewer, Josh Rucevice, Charlie Shahan, Ethan Webb, Ethan Hensley, Patrick Vergason, Bryson Brandon
 #### CSCI 4350
 #### Spring 2024, East Tennessee State University
 
