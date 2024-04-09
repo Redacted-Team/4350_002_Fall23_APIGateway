@@ -1,3 +1,5 @@
+using APIGateway;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +11,14 @@ builder.Services.AddSwaggerGen();
 
 // Register HttpClient
 builder.Services.AddHttpClient();
+
+// This creates the services for the Logging files.
+builder.Services.AddLogging(builder =>
+{
+    builder.AddConsole();
+    builder.AddDebug();
+    builder.AddTimestampLogger(); // Add timestamp logger
+});
 
 var app = builder.Build();
 
