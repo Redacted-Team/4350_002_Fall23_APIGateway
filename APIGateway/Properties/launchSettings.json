@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "GameMicroServer": {
+    "APIGateway": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7223;http://localhost:5130"
+      "applicationUrl": "https://localhost:4141"
     },
     "IIS Express": {
       "commandName": "IISExpress",
