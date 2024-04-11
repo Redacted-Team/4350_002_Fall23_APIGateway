@@ -33,8 +33,11 @@ namespace Gateway
         {
             try
             {
+                // Make sure to set the base address for the HttpClient
+                _httpClient.BaseAddress = new Uri("https://localhost:7223");
+
                 // Make a GET request to the microservice's endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7223/Micro"); // URL might need to change for deployment 
+                HttpResponseMessage response = await _httpClient.GetAsync("/Micro"); // URL might need to change for deployment 
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
