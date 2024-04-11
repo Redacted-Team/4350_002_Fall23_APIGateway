@@ -6,7 +6,7 @@
 #### Spring 2024, East Tennessee State University
 
 ### Overview:
-This is the API Gateway that requests and queries from the main website, routed through a single entry-point to the [BOBBY Project](https://github.com/chrisseals98/BOBBY).
+This is the API Gateway that requests and queries from the main website, routed through a single entry-point to the [[Redacted] Project](https://github.com/Redacted-Team/4350_002_Fall23_MicroService).
 
 ### Project Structure:
 * This API Gateway acts as a middle-man to facilitate interaction between the BucStop main site and the Microservice(s).
