@@ -36,7 +36,7 @@ namespace Gateway
         {
             try
             {
-                await AddGameInfo(TheInfo, "localhostforsnake", "snakecontrollerendpoint" ); //Snake 
+                await AddGameInfo(TheInfo, "https://localhost:1948", "/Snake" ); //Snake 
                 await AddGameInfo(TheInfo, "localhostfortetris", "tetriscontrollerendpoint"); //Tetris
                 await AddGameInfo(TheInfo, "localhostforpong", "pongcontrollerendpoint"); //Pong
                 return TheInfo;
