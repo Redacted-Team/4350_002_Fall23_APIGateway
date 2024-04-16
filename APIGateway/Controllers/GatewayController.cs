@@ -34,7 +34,7 @@ namespace Gateway
             try
             {
                 // Make a GET request to the microservice's endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7223/Micro"); // URL might need to change for deployment 
+                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:2626/Tetris"); // URL might need to change for deployment 
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
