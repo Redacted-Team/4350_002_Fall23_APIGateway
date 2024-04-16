@@ -1,5 +1,3 @@
-using APIGateway;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,12 +10,11 @@ builder.Services.AddSwaggerGen();
 // Register HttpClient
 builder.Services.AddHttpClient();
 
-// This creates the services for the Logging files.
-builder.Services.AddLogging(builder =>
+// This creates the timestamp for the logger.
+builder.Logging.AddSimpleConsole(options =>
 {
-    builder.AddConsole();
-    builder.AddDebug();
-    builder.AddTimestampLogger(); // Add timestamp logger
+    options.IncludeScopes = true;
+    options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
 });
 
 var app = builder.Build();
