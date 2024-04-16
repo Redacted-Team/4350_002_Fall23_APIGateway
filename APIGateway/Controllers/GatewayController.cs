@@ -34,18 +34,26 @@ namespace Gateway
             try
             {
                 // Make a GET request to the microservice's endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:2626/Tetris"); // URL might need to change for deployment 
+                HttpResponseMessage tetrisResponse = await _httpClient.GetAsync("https://localhost:2626/Tetris"); // URL might need to change for deployment 
+                HttpResponseMessage snakeResponse = await _httpClient.GetAsync("https://localhost:1948/Snake");
+                HttpResponseMessage pongResponse = await _httpClient.GetAsync("https://localhost:1941/Pong");
 
                 // Check if the request was successful
-                if (response.IsSuccessStatusCode)
+                if (tetrisResponse.IsSuccessStatusCode && snakeResponse.IsSuccessStatusCode && pongResponse.IsSuccessStatusCode)
                 {
                     // Deserialize the response content to a list of GameInfo objects
-                    var gameInfoList = await response.Content.ReadAsAsync<List<GameInfo>>();
+                    var tetrisInfoList = await tetrisResponse.Content.ReadAsAsync<List<GameInfo>>();
+                    var snakeInfoList = await snakeResponse.Content.ReadAsAsync<List<GameInfo>>();
+                    var pongInfoList = await pongResponse.Content.ReadAsAsync<List<GameInfo>>();
+                    var gameInfoList = new List<GameInfo>();
+                    gameInfoList.AddRange(tetrisInfoList);
+                    gameInfoList.AddRange(snakeInfoList);
+                    gameInfoList.AddRange(pongInfoList);
                     return gameInfoList;
                 }
                 else
                 {
-                    _logger.LogError($"Failed to retrieve data from microservice. Status code: {response.StatusCode}");
+                    _logger.LogError($"Failed to retrieve data from microservice. Status code: {tetrisResponse.StatusCode}");
                     // Return a placeholder list of GameInfo objects indicating failure
                     return GenerateFailureResponse();
                 }
