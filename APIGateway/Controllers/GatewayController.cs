@@ -37,8 +37,8 @@ namespace Gateway
             try
             {
                 await AddGameInfo(TheInfo, "https://localhost:1948", "/Snake" ); //Snake 
-                await AddGameInfo(TheInfo, "localhostfortetris", "tetriscontrollerendpoint"); //Tetris
-                await AddGameInfo(TheInfo, "localhostforpong", "pongcontrollerendpoint"); //Pong
+                await AddGameInfo(TheInfo, "https://localhost:2626", "/Tetris"); //Tetris
+                await AddGameInfo(TheInfo, "https://localhost:1941", "Pong"); //Pong
                 return TheInfo;
             }
             catch (Exception ex)
