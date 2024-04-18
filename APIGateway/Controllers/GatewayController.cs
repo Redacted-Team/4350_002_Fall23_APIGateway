@@ -36,9 +36,10 @@ namespace Gateway
         {
             try
             {
-                await AddGameInfo(TheInfo, "https://localhost:1948", "/Snake" ); //Snake 
-                await AddGameInfo(TheInfo, "https://localhost:2626", "/Tetris"); //Tetris
-                await AddGameInfo(TheInfo, "https://localhost:1941", "Pong"); //Pong
+                var SnakeTask = AddGameInfo("https://localhost:1948", "/Snake" ); //Snake 
+                var Tetristask = AddGameInfo("https://localhost:2626", "/Tetris"); //Tetris
+                var PongTask = AddGameInfo("https://localhost:1941", "Pong"); //Pong
+                await Task.WhenAll(SnakeTask, Tetristask, PongTask);
                 return TheInfo;
             }
             catch (Exception ex)
@@ -58,23 +59,27 @@ namespace Gateway
          /// <param name="endpoint"></param>
          /// <returns></returns>
          [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task AddGameInfo(List<GameInfo> gameinfolist, string baseUrl, string endpoint)
+        public async Task AddGameInfo(string baseUrl, string endpoint)
         {
             try
             {
+                using var client = new HttpClient();
                 //Set the base address of the microservice 
-                _httpClient.BaseAddress = new Uri(baseUrl);
+                client.BaseAddress = new Uri(baseUrl);
 
                 //Read the data from the endpoint 
-                HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
+                HttpResponseMessage response = await client.GetAsync(endpoint);
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
                 {
                     // Deserialize the response content to a GameInfo object
-                    var gameinfo = await response.Content.ReadAsAsync<GameInfo>();
+                    var gameinfo = await response.Content.ReadAsAsync<List<GameInfo>>();
                     //Add object to list
-                    gameinfolist.Add(gameinfo);
+                    lock (TheInfo)
+                    {
+                        TheInfo.AddRange(gameinfo);
+                    }
                 }
                 else
                 {
