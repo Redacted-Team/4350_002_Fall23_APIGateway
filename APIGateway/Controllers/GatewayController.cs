@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace Gateway
 {
@@ -17,15 +18,17 @@ namespace Gateway
     {
         private readonly HttpClient _httpClient; // Making readonly ensures thread safety 
         private readonly ILogger<GatewayController> _logger; // Making readonly ensures thread safety 
+        private readonly List<GameInfo> TheInfo;
 
         public GatewayController(HttpClient httpClient, ILogger<GatewayController> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
+            TheInfo = new List<GameInfo>();
         }
 
         /// <summary>
-        /// Handles GET requests to retrieve game information from the microservice.
+        /// Handles GET requests to retrieve game information from microservices.
         /// </summary>
         /// <returns>A collection of GameInfo objects.</returns>
         [HttpGet]
@@ -33,22 +36,11 @@ namespace Gateway
         {
             try
             {
-                // Make a GET request to the microservice's endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7223/Micro"); // URL might need to change for deployment 
-
-                // Check if the request was successful
-                if (response.IsSuccessStatusCode)
-                {
-                    // Deserialize the response content to a list of GameInfo objects
-                    var gameInfoList = await response.Content.ReadAsAsync<List<GameInfo>>();
-                    return gameInfoList;
-                }
-                else
-                {
-                    _logger.LogError($"Failed to retrieve data from microservice. Status code: {response.StatusCode}");
-                    // Return a placeholder list of GameInfo objects indicating failure
-                    return GenerateFailureResponse();
-                }
+                var SnakeTask = AddGameInfo("https://localhost:1948", "/Snake" ); //Snake 
+                var Tetristask = AddGameInfo("https://localhost:2626", "/Tetris"); //Tetris
+                var PongTask = AddGameInfo("https://localhost:1941", "Pong"); //Pong
+                await Task.WhenAll(SnakeTask, Tetristask, PongTask);
+                return TheInfo;
             }
             catch (Exception ex)
             {
@@ -58,8 +50,52 @@ namespace Gateway
             }
         }
 
+         /// <summary>
+         /// Attempts to retrieve gameinfo object from a microservice that holds a game info object (snake, tetris, pong)
+         /// and adds the game info into a list of game info objects
+         /// </summary>
+         /// <param name="gameinfolist"></param>
+         /// <param name="baseUrl"></param>
+         /// <param name="endpoint"></param>
+         /// <returns></returns>
+         [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task AddGameInfo(string baseUrl, string endpoint)
+        {
+            try
+            {
+                using var client = new HttpClient();
+                //Set the base address of the microservice 
+                client.BaseAddress = new Uri(baseUrl);
+
+                //Read the data from the endpoint 
+                HttpResponseMessage response = await client.GetAsync(endpoint);
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserialize the response content to a GameInfo object
+                    var gameinfo = await response.Content.ReadAsAsync<List<GameInfo>>();
+                    //Add object to list
+                    lock (TheInfo)
+                    {
+                        TheInfo.AddRange(gameinfo);
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to retrieve data from microservice at endpoint {endpoint}. Status code: {response.StatusCode}");
+                }
+
+            }
+            catch (Exception ex) //Log error and return false if any exception occurs
+            { 
+                _logger.LogError(ex.Message);
+            }
+        }
+
         /// <summary>
         /// Generates a placeholder list of GameInfo objects indicating failure to retrieve data.
+        /// Written with ChatGPT
         /// </summary>
         /// <returns>A collection of GameInfo objects indicating failure.</returns>
         private IEnumerable<GameInfo> GenerateFailureResponse()
