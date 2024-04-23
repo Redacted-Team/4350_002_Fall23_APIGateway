@@ -1,70 +1,121 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
-using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
+using System.Net.Http.Json;
+using System.Text;
 
 namespace Gateway
 {
+    /// <summary>
+    /// Controller responsible for handling requests and responses at the gateway.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class GatewayController : ControllerBase
     {
-        private static readonly List<GameInfo> TheInfo = new List<GameInfo>
+        private readonly HttpClient _httpClient; // Making readonly ensures thread safety 
+        private readonly ILogger<GatewayController> _logger; // Making readonly ensures thread safety 
+        private readonly List<GameInfo> TheInfo;
+
+        public GatewayController(HttpClient httpClient, ILogger<GatewayController> logger)
         {
-            new GameInfo { 
-                //Id = 1,
-                Title = "Snake",
-                //Content = "~/js/snake.js",
-                Author = "Fall 2023 Semester",
-                DateAdded = "",
-                Description = "Snake is a classic arcade game that challenges the player to control a snake-like creature that grows longer as it eats apples. The player must avoid hitting the walls or the snake's own body, which can end the game.\r\n",
-                HowTo = "Control with arrow keys.",
-                //Thumbnail = "/images/snake.jpg" //640x360 resolution
-                LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
-
-    },
-            new GameInfo { 
-                //Id = 2,
-                Title = "Tetris",
-                //Content = "~/js/tetris.js",
-                Author = "Fall 2023 Semester",
-                DateAdded = "",
-                Description = "Tetris is a classic arcade puzzle game where the player has to arrange falling blocks, also known as Tetronimos, of different shapes and colors to form complete rows on the bottom of the screen. The game gets faster and harder as the player progresses, and ends when the Tetronimos reach the top of the screen.",
-                HowTo = "Control with arrow keys: Up arrow to spin, down to speed up fall, space to insta-drop.",
-                //Thumbnail = "/images/tetris.jpg"
-                LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
-                
-            },
-            new GameInfo { 
-                //Id = 3,
-                Title = "Pong",
-                //Content = "~/js/pong.js",
-                Author = "Fall 2023 Semester",
-                DateAdded = "",
-                Description = "Pong is a classic arcade game where the player uses a paddle to hit a ball against a computer's paddle. Either party scores when the ball makes it past the opponent's paddle.",
-                HowTo = "Control with arrow keys.",
-                //Thumbnail = "/images/pong.jpg"
-                LeaderBoardStack = new Stack<KeyValuePair<string, int>>(),
-            },
-
-        };
-
-        private readonly ILogger<GatewayController> _logger;
-
-        public GatewayController(ILogger<GatewayController> logger)
-        {
+            _httpClient = httpClient;
             _logger = logger;
+            TheInfo = new List<GameInfo>();
         }
 
+        /// <summary>
+        /// Handles GET requests to retrieve game information from microservices.
+        /// </summary>
+        /// <returns>A collection of GameInfo objects.</returns>
         [HttpGet]
-        public IEnumerable<GameInfo> Get()
+        public async Task<IEnumerable<GameInfo>> Get()
         {
-            return TheInfo;
+            try
+            {
+                var SnakeTask = AddGameInfo("https://localhost:1948", "/Snake" ); //Snake 
+                var Tetristask = AddGameInfo("https://localhost:2626", "/Tetris"); //Tetris
+                var PongTask = AddGameInfo("https://localhost:1941", "Pong"); //Pong
+                await Task.WhenAll(SnakeTask, Tetristask, PongTask);
+                return TheInfo;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching data from microservice: {ex.Message}");
+                // Return a placeholder list of GameInfo objects indicating failure
+                return GenerateFailureResponse();
+            }
+        }
+
+         /// <summary>
+         /// Attempts to retrieve gameinfo object from a microservice that holds a game info object (snake, tetris, pong)
+         /// and adds the game info into a list of game info objects
+         /// </summary>
+         /// <param name="gameinfolist"></param>
+         /// <param name="baseUrl"></param>
+         /// <param name="endpoint"></param>
+         /// <returns></returns>
+         [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task AddGameInfo(string baseUrl, string endpoint)
+        {
+            try
+            {
+                using var client = new HttpClient();
+                //Set the base address of the microservice 
+                client.BaseAddress = new Uri(baseUrl);
+
+                //Read the data from the endpoint 
+                HttpResponseMessage response = await client.GetAsync(endpoint);
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserialize the response content to a GameInfo object
+                    var gameinfo = await response.Content.ReadAsAsync<List<GameInfo>>();
+                    //Add object to list
+                    lock (TheInfo)
+                    {
+                        TheInfo.AddRange(gameinfo);
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to retrieve data from microservice at endpoint {endpoint}. Status code: {response.StatusCode}");
+                }
+
+            }
+            catch (Exception ex) //Log error and return false if any exception occurs
+            { 
+                _logger.LogError(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Generates a placeholder list of GameInfo objects indicating failure to retrieve data.
+        /// Written with ChatGPT
+        /// </summary>
+        /// <returns>A collection of GameInfo objects indicating failure.</returns>
+        private IEnumerable<GameInfo> GenerateFailureResponse()
+        {
+            // Using IEnumerable allows flexibility in returning a placeholder response.
+            // It allows the method to return different types of collections (e.g., List, Array) if needed in the future.
+            // In this case, IEnumerable provides a simple way to return a list of failed responses.
+
+            // Generate a placeholder list of GameInfo objects indicating failure to retrieve data
+            return new List<GameInfo>
+            {
+                new GameInfo
+                {
+                    Title = "Failed to retrieve from Microservice",
+                    Author = "Failed to retrieve from Microservice",
+                    Description = "Failed to retrieve from Microservice",
+                    HowTo = "Failed to retrieve from Microservice",
+                    LeaderBoardStack = new Stack<KeyValuePair<string, int>>() // Initializing an empty stack
+                }
+            };
         }
     }
 }
